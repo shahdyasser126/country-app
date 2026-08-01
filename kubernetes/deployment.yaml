@@ -2,47 +2,59 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: country-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: country-app
-  template:
-    metadata:
-      labels:
-        app: country-app
-    spec:
-      containers:
-      - name: country-app
-        image: country-app:v1
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 80
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: country-app
+  namespace: country-app
+
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: country-app
+
   template:
     metadata:
       labels:
         app: country-app
+
     spec:
       containers:
       - name: country-app
         image: country-app:v1
         imagePullPolicy: Never
+
         ports:
         - containerPort: 80
+
+        env:
+        - name: APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: country-app-config
+              key: APP_NAME
+
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: country-app-config
+              key: ENVIRONMENT
+
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: country-app-secret
+              key: DB_USER
+
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: country-app-secret
+              key: DB_PASSWORD
 
         resources:
           requests:
             cpu: "100m"
             memory: "128Mi"
+
           limits:
             cpu: "500m"
             memory: "512Mi"

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: country-app-config
+  namespace: country-app
+data:
+  APP_NAME: "Country App"
+  ENVIRONMENT: "production"

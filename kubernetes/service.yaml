@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: country-app-service
+  namespace: country-app
 spec:
   type: NodePort
   selector:
